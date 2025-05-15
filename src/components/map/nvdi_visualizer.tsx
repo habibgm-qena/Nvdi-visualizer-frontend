@@ -16,6 +16,7 @@ import {
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
 import { useLocation } from '@/hooks/location_context';
+import { isWithinBounds } from '@/utils/validateLatLong';
 
 import CreditScoreDrawer from '../scoringSheet/scoringSheet';
 import ColorScaleRuler from './colorRuler';
@@ -64,7 +65,7 @@ export default function MapGrid() {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        if (lat && lng) {
+        if (lat && lng && isWithinBounds(lat, lng)) {
             setIsOpen(true);
         }
     }, [lat, lng]);
@@ -112,7 +113,7 @@ export default function MapGrid() {
             </div>
 
             {/* Year Slider Overlay at Bottom */}
-            <div className='absolute top-6 left-1/2 z-1000 w-80 -translate-x-1/2 transform rounded-lg bg-white/90 p-4 shadow-md'>
+            <div className='absolute top-2 left-16 z-1000 w-[80%] transform rounded-lg bg-white/90 p-4 shadow-md'>
                 <YearSlider maps={maps} selectedIndex={selectedIndex} onChange={setSelectedIndex} />
             </div>
         </div>

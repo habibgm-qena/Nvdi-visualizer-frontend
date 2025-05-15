@@ -3,7 +3,6 @@
 import React, { use, useEffect, useState } from 'react';
 
 import { scoreChartScore } from '@/app/api/endpoints/creditScoring/creditScoring';
-import { useLocation } from '@/hooks/location_context';
 import { useGenericMethod } from '@/hooks/useGenericMethod';
 
 import { Loader } from 'lucide-react';
@@ -67,7 +66,6 @@ const AreaChartComponent: React.FC<{ nvdiScoresdata: any; nvdi75Scoredata: any }
     nvdi75Scoredata
 }) => {
     const [loading, setLoading] = useState(true);
-    const { lat, lng, setLat, setLng } = useLocation();
     const [chartData, setChartData] = useState<DataPoint[]>([]);
     const [ymax, setYmax] = useState(1);
     const [ymin, setYmin] = useState(-1);

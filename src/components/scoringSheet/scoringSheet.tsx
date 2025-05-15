@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { useLocation } from '@/hooks/location_context';
 import { useGenericMethod } from '@/hooks/useGenericMethod';
 import { Recommendations, getAgroRecommendations } from '@/lib/agro';
+import { isWithinBounds } from '@/utils/validateLatLong';
 
 import AreaChartComponent from '../charts/areaChart';
 import RecommendationsDisplay from '../recommendations/recommendation';
@@ -91,7 +92,7 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
     });
 
     useEffect(() => {
-        if (lat && lng) {
+        if (lat && lng && isWithinBounds(lat, lng)) {
             setNvdiScoresdata(null);
             setrCrops([]);
             setrFertilizers([]);

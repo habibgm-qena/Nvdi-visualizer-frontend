@@ -66,7 +66,7 @@ function VectorTileLayer({ url }: { url: string }) {
 }
 
 function ClickHandler({ onClick }: { onClick: (latlng: L.LatLng) => void }) {
-    const { lat, lng, setLat, setLng } = useLocation();
+    const { setLat, setLng } = useLocation();
     useMapEvents({
         click(e: any) {
             setLat(e.latlng.lat);
