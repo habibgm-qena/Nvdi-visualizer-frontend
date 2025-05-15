@@ -79,7 +79,7 @@ export default function MapGrid() {
 
             {/* UI Controls Overlay */}
             <div className='absolute top-4 right-4 z-1000 flex items-center gap-2'>
-                <Dialog>
+                {/* <Dialog>
                     <DialogTrigger asChild>
                         <Button
                             variant='ghost'
@@ -109,7 +109,7 @@ export default function MapGrid() {
                     <span className='sr-only'>Open menu</span>
                 </Button>
 
-                <CreditScoreDrawer isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)} />
+                <CreditScoreDrawer isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)} /> */}
             </div>
 
             {/* Year Slider Overlay at Bottom */}
