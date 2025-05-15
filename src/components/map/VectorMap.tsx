@@ -77,7 +77,7 @@ function BaseLayerControl({ gmReady }: { gmReady: boolean }) {
         });
 
         // 5) Add default (roads)
-        roads.addTo(map);
+        hybrid.addTo(map);
 
         // 6) Build control with all three
         controlRef.current = L.control
