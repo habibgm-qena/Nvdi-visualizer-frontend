@@ -113,7 +113,7 @@ export default function MapGrid() {
             </div>
 
             {/* Year Slider Overlay at Bottom */}
-            <div className='absolute top-2 left-16 z-1000 w-[80%] transform rounded-lg bg-white/90 p-4 shadow-md'>
+            <div className='absolute top-2 left-16 z-1000 w-[20%] transform rounded-lg bg-white/90 p-4 shadow-md'>
                 <YearSlider maps={maps} selectedIndex={selectedIndex} onChange={setSelectedIndex} />
             </div>
         </div>

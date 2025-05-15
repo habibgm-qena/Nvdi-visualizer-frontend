@@ -125,8 +125,8 @@ function VectorTileLayer({ url }: { url: string }) {
                     color: props.outlineColor || 'transparent',
                     weight: props.weight ?? 1,
                     fillColor: props.score != null ? getColorByScore(props.score) : props.color || 'transparent',
-                    fillOpacity: props.opacity ?? 0.7,
-                    radius: props.radius ?? 8
+                    fillOpacity: props.opacity ?? 0.6,
+                    radius: props.radius ?? 10
                 });
             });
             layer.options.vectorTileLayerStyles = styles;
