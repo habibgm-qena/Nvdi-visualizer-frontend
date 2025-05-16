@@ -106,6 +106,7 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
             setrCrops([]);
             setrFertilizers([]);
             setRecDetails(initialRecDetails);
+            setLocation(null);
             nvdiScores.reset();
             nvdiScores.handleAction({
                 crop_location: { latitude: lat, longitude: lng }
@@ -138,16 +139,16 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
                         </p>
                     )}
 
-                    <div className='flex h-full min-h-0 flex-col items-center overflow-auto px-4'>
-                        <div className='w-[100%]'>
-                            <div className='w-full overflow-x-auto'>
-                                {isLoading && (
+                    <div className='flex h-full flex-col items-center overflow-auto px-4'>
+                        <div className='h-[35%] w-[100%]'>
+                            <div className='h-full w-full overflow-x-auto'>
+                                {/* {isLoading && (
                                     <div className='relative'>
                                         <div className='absolute left-[50%] flex h-40 items-center justify-center'>
                                             <Loader2 className='size-12 animate-spin' />
                                         </div>
                                     </div>
-                                )}
+                                )} */}
 
                                 <AreaChartComponent nvdiScoresdata={nvdiScoresdata} nvdi75Scoredata={nvdi75Scoredata} />
                             </div>

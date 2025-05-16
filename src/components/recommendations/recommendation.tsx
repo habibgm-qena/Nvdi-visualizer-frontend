@@ -71,7 +71,7 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
         return (
             <Card
                 key={index}
-                className='border-0 bg-white shadow-sm transition-all duration-200 hover:shadow dark:bg-gray-800'>
+                className='h-full border-0 bg-white shadow-sm transition-all duration-200 hover:shadow dark:bg-gray-800'>
                 <div className='border-b border-gray-100 bg-white p-2 pb-3 dark:border-gray-700 dark:bg-gray-800'>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center gap-2'>

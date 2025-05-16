@@ -119,15 +119,15 @@ const AreaChartComponent: React.FC<{ nvdiScoresdata: any; nvdi75Scoredata: any }
 
     if (loading) {
         return (
-            <div className='mt-10 flex h-72 w-full items-center justify-center'>
+            <div className='flex h-full w-full items-center justify-center'>
                 <Loader className='h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-gray-900' />
             </div>
         );
     }
 
     return (
-        <div className='mx-0 mt-10 h-72 w-full p-0'>
-            <ResponsiveContainer width='100%' height='100%'>
+        <div className='mx-0 h-full w-[100%] overflow-x-hidden p-0'>
+            <ResponsiveContainer width='100%' height='90%'>
                 <AreaChart data={chartData} margin={{ top: 10, right: -20, left: 20, bottom: 20 }}>
                     <defs>
                         <linearGradient id='areaGradient' x1='0' y1='1' x2='0' y2='0' gradientUnits='objectBoundingBox'>
