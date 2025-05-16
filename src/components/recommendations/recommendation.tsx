@@ -131,7 +131,7 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
         return (
             <Card
                 key={index}
-                className='h-full border-0 bg-white shadow-sm transition-all duration-200 hover:shadow dark:bg-gray-800'>
+                className='border-0 bg-white shadow-sm transition-all duration-200 hover:shadow dark:bg-gray-800'>
                 <Accordion type='single' collapsible className='w-full'>
                     <AccordionItem value={`item-${index}`} className='border-0'>
                         <CardHeader className='border-b border-gray-100 p-3 dark:border-gray-700'>
