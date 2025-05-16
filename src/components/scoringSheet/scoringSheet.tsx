@@ -51,6 +51,9 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
     const [loading, setLoading] = useState<boolean>(true);
     const { lat, lng } = useLocation();
     const [recDetails, setRecDetails] = useState<Recommendations | undefined>(initialRecDetails);
+    const [location, setLocation] = useState<{ zone: string; woreda: string; kebele: string; region: string } | null>(
+        null
+    );
 
     const nvdiScores = useGenericMethod({
         method: 'GET',
@@ -72,6 +75,12 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
                     score: item
                 }))
             );
+            setLocation({
+                zone: data.ndvi_score_per_location.zone,
+                woreda: data.ndvi_score_per_location.wereda,
+                kebele: data.ndvi_score_per_location.kebele,
+                region: data.ndvi_score_per_location.region
+            });
             setRecDetails(undefined);
             getAgroRecommendations(data.recommended_crops, data.recommended_fertilizers)
                 .then((recommendations) => {
@@ -97,6 +106,7 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
             setrCrops([]);
             setrFertilizers([]);
             setRecDetails(initialRecDetails);
+            nvdiScores.reset();
             nvdiScores.handleAction({
                 crop_location: { latitude: lat, longitude: lng }
             });
@@ -121,6 +131,13 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
                             </div>
                         </SheetTitle>
                     </SheetHeader>
+
+                    {location && (
+                        <p className='w-[80%] self-center justify-self-center text-sm font-thin text-wrap'>
+                            {location.kebele}, {location.woreda}, {location.zone}, {location.region}
+                        </p>
+                    )}
+
                     <div className='flex h-full min-h-0 flex-col items-center overflow-auto px-4'>
                         <div className='w-[100%]'>
                             <div className='w-full overflow-x-auto'>
@@ -136,7 +153,11 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
                             </div>
                         </div>
 
-                        <RecommendationsDisplay recommendations={recDetails} />
+                        <RecommendationsDisplay
+                            recommendations={recDetails}
+                            cropRecommendation={rCrops}
+                            fertilizerRecommendation={rFertilizers}
+                        />
 
                         {/* <div className='w-[100%]'>
                             <div className='mx-10 mt-7'>
