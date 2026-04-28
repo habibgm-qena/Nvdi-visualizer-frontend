@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     outputFileTracingIncludes: {
         '/*': ['./registry/**/*']
     },
+    turbopack: {},
     images: {
         remotePatterns: [
             {
