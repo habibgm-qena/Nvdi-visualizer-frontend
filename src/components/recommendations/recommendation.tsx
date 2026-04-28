@@ -195,12 +195,12 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
     };
 
     return (
-        <div className='mx-auto mb-10 flex min-h-0 w-full max-w-4xl flex-1 flex-col px-3'>
+        <div className='mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col'>
             <Tabs defaultValue='crops' className='flex min-h-0 w-full flex-1 flex-col'>
-                <TabsList className='mb-4 flex w-full rounded-lg bg-white shadow-sm dark:bg-gray-800'>
+                <TabsList className='mb-3 grid h-10 w-full grid-cols-2 gap-1 rounded-xl border border-zinc-200/70 bg-white p-1 shadow-sm dark:border-zinc-800 dark:bg-zinc-900'>
                     <TabsTrigger
                         value='crops'
-                        className='flex-1 border-b-2 border-transparent px-1 py-2 text-sm transition-all data-[state=active]:border-green-500 data-[state=active]:bg-green-50/50 data-[state=active]:font-medium data-[state=active]:text-green-600 dark:data-[state=active]:bg-green-900/20 dark:data-[state=active]:text-green-400'>
+                        className='rounded-lg text-sm font-medium text-zinc-500 transition-all data-[state=active]:bg-emerald-500/10 data-[state=active]:text-emerald-700 dark:text-zinc-400 dark:data-[state=active]:bg-emerald-500/15 dark:data-[state=active]:text-emerald-300'>
                         <div className='flex items-center gap-1.5'>
                             <Wheat className='h-4 w-4' />
                             <span>Crops</span>
@@ -208,7 +208,7 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
                     </TabsTrigger>
                     <TabsTrigger
                         value='fertilizers'
-                        className='flex-1 border-b-2 border-transparent px-1 py-2 text-sm transition-all data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50/50 data-[state=active]:font-medium data-[state=active]:text-blue-600 dark:data-[state=active]:bg-blue-900/20 dark:data-[state=active]:text-blue-400'>
+                        className='rounded-lg text-sm font-medium text-zinc-500 transition-all data-[state=active]:bg-sky-500/10 data-[state=active]:text-sky-700 dark:text-zinc-400 dark:data-[state=active]:bg-sky-500/15 dark:data-[state=active]:text-sky-300'>
                         <div className='flex items-center gap-1.5'>
                             <FlaskConical className='h-4 w-4' />
                             <span>Fertilizers</span>
@@ -218,14 +218,7 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
 
                 {/* Apply custom scrollable styles directly to TabsContent */}
                 {!loading && (
-                    <TabsContent
-                        value='crops'
-                        className='flex-1 space-y-3 overflow-y-auto'
-                        style={{
-                            // maxHeight: maxHeight,
-                            // overflowY: 'scroll',
-                            paddingRight: '8px' // Add some padding for scrollbar
-                        }}>
+                    <TabsContent value='crops' className='scrollbar-hidden flex-1 space-y-3 overflow-y-auto'>
                         {recommendations &&
                             recommendations.crops.map((crop, index) => (
                                 <CropsRecRender key={index} crop={crop} index={index} />
@@ -245,14 +238,7 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
                 )}
 
                 {!loading && (
-                    <TabsContent
-                        value='fertilizers'
-                        className='flex-1 space-y-3 overflow-y-auto'
-                        style={{
-                            // maxHeight: maxHeight,
-                            // overflowY: 'scroll',
-                            paddingRight: '8px' // Add some padding for scrollbar
-                        }}>
+                    <TabsContent value='fertilizers' className='scrollbar-hidden flex-1 space-y-3 overflow-y-auto'>
                         {recommendations &&
                             recommendations.fertilizers.map((fertilizer, index) => (
                                 <FertilizersRecRender key={index} fertilizer={fertilizer} index={index} />
@@ -272,8 +258,18 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
                 )}
 
                 {loading && (
-                    <div className='mt-10 flex h-72 w-full items-center justify-center'>
-                        <Loader className='h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-gray-900' />
+                    <div className='mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-200 bg-white/60 py-12 text-center dark:border-zinc-800 dark:bg-zinc-900/40'>
+                        <div className='relative'>
+                            <Loader className='h-8 w-8 animate-spin text-emerald-500' />
+                        </div>
+                        <div>
+                            <p className='text-sm font-medium text-zinc-700 dark:text-zinc-200'>
+                                Analyzing this location
+                            </p>
+                            <p className='text-xs text-zinc-500 dark:text-zinc-400'>
+                                Crops and fertilizers will appear here.
+                            </p>
+                        </div>
                     </div>
                 )}
             </Tabs>

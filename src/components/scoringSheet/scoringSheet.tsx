@@ -12,22 +12,10 @@ import { isWithinBounds } from '@/utils/validateLatLong';
 import AreaChartComponent from '../charts/areaChart';
 import RecommendationsDisplay from '../recommendations/recommendation';
 import './scoringSheet.scss';
-import { LightbulbIcon, Loader2 } from 'lucide-react';
+import { Activity, MapPin } from 'lucide-react';
 
 /* eslint-disable promise/always-return */
 /* eslint-disable promise/catch-or-return */
-
-interface KeyFactor {
-    label: string;
-    value: string;
-}
-
-const keyFactors: KeyFactor[] = [
-    { label: 'On-time Payments', value: '100%' },
-    { label: 'Credit Utilization', value: '5.24%' },
-    { label: 'Credit Age', value: '4y 1m' },
-    { label: 'New Accounts', value: '5' }
-];
 
 interface CreditScoreDrawerProps {
     isOpen: boolean;
@@ -40,7 +28,6 @@ const initialRecDetails = {
 };
 
 const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenChange }) => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const sheetContentRef = useRef<HTMLDivElement>(null!);
     const sheetTitleRef = useRef<HTMLDivElement>(null!);
     const [rCrops, setrCrops] = useState<any>([]);
@@ -60,7 +47,6 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
         apiMethod: agriRecommend,
         skipWithOutParams: true,
         onSuccess: (data) => {
-            console.log('Data fetched successfully:', data);
             setrFertilizers(data.recommended_fertilizers);
             setrCrops(data.recommended_crops);
             setNvdiScoresdata(
@@ -84,7 +70,6 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
             setRecDetails(undefined);
             getAgroRecommendations(data.recommended_crops, data.recommended_fertilizers)
                 .then((recommendations) => {
-                    console.log('Recommendations:', recommendations);
                     setRecDetails(recommendations);
                 })
                 .catch((error) => {
@@ -114,104 +99,61 @@ const CreditScoreDrawer: React.FC<CreditScoreDrawerProps> = ({ isOpen, onOpenCha
         }
     }, [lat, lng]);
 
+    const locationLabel = location
+        ? [location.kebele, location.woreda, location.zone, location.region].filter(Boolean).join(' · ')
+        : null;
+
     return (
-        <div className=''>
-            <Sheet open={isOpen} onOpenChange={onOpenChange}>
-                <SheetContent
-                    side='right'
-                    className='z-10000 flex w-md max-w-md flex-col overflow-y-auto'
-                    ref={sheetContentRef}>
-                    <SheetHeader>
-                        <SheetTitle ref={sheetTitleRef}>
-                            <div className='grid grid-cols-1 gap-6 border-none md:grid-cols-2'>
+        <Sheet open={isOpen} onOpenChange={onOpenChange}>
+            <SheetContent
+                side='right'
+                className='nvdi-sheet z-10000 flex w-full max-w-md flex-col gap-0 overflow-hidden bg-gradient-to-b from-white via-white to-emerald-50/40 p-0 dark:from-zinc-950 dark:via-zinc-950 dark:to-emerald-950/20'
+                ref={sheetContentRef}>
+                <SheetHeader className='border-b border-zinc-200/70 bg-white/70 px-5 py-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70'>
+                    <SheetTitle ref={sheetTitleRef} asChild>
+                        <div>
+                            <div className='flex items-center gap-2'>
+                                <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300'>
+                                    <Activity className='h-4 w-4' />
+                                </div>
                                 <div>
-                                    <div className='flex items-center justify-between'>
-                                        <p>NDVI Score Progress</p>
-                                    </div>
+                                    <p className='text-sm leading-tight font-semibold text-zinc-800 dark:text-zinc-100'>
+                                        NDVI Score Progress
+                                    </p>
+                                    <p className='text-[11px] leading-tight text-zinc-500 dark:text-zinc-400'>
+                                        Last 8 years · average & 75th percentile
+                                    </p>
                                 </div>
                             </div>
-                        </SheetTitle>
-                    </SheetHeader>
 
-                    {location && (
-                        <p className='w-[80%] self-center justify-self-center text-sm font-thin text-wrap'>
-                            {location.kebele}, {location.woreda}, {location.zone}, {location.region}
+                            {locationLabel && (
+                                <div className='mt-3 inline-flex max-w-full items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300'>
+                                    <MapPin className='h-3 w-3 shrink-0' />
+                                    <span className='truncate'>{locationLabel}</span>
+                                </div>
+                            )}
+                        </div>
+                    </SheetTitle>
+                </SheetHeader>
+
+                <div className='nvdi-sheet-scroll flex h-full min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 py-4'>
+                    <div className='rounded-2xl border border-zinc-200/70 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900'>
+                        <p className='mb-1 px-1 text-[11px] font-semibold tracking-wider text-zinc-500 uppercase dark:text-zinc-400'>
+                            NDVI trend
                         </p>
-                    )}
-
-                    <div className='flex h-full flex-col items-center overflow-auto px-4'>
-                        <div className='h-[35%] w-[100%]'>
-                            <div className='h-full w-full overflow-x-auto'>
-                                {/* {isLoading && (
-                                    <div className='relative'>
-                                        <div className='absolute left-[50%] flex h-40 items-center justify-center'>
-                                            <Loader2 className='size-12 animate-spin' />
-                                        </div>
-                                    </div>
-                                )} */}
-
-                                <AreaChartComponent nvdiScoresdata={nvdiScoresdata} nvdi75Scoredata={nvdi75Scoredata} />
-                            </div>
+                        <div className='h-56 w-full'>
+                            <AreaChartComponent nvdiScoresdata={nvdiScoresdata} nvdi75Scoredata={nvdi75Scoredata} />
                         </div>
-
-                        <RecommendationsDisplay
-                            recommendations={recDetails}
-                            cropRecommendation={rCrops}
-                            fertilizerRecommendation={rFertilizers}
-                        />
-
-                        {/* <div className='w-[100%]'>
-                            <div className='mx-10 mt-7'>
-                                <div className='mb-2 flex items-center gap-2 text-orange-500'>
-                                    <LightbulbIcon className='size-5' aria-hidden='true' />
-                                    <h3 className='font-semibold'>Crop Recommendations</h3>
-                                </div>
-                                <ul className='list-disc space-y-2 pl-10 text-sm'>
-                                    {rCrops.map((crop: any, index: number) => (
-                                        <li key={index} className='text-[15px] font-thin'>
-                                            {crop}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className='mx-10 mt-10 text-[21px]'>
-                                <h3 className='font-semibold'>Fertilizer Recommendations</h3>
-                                <hr className='mb-4' />
-                                <div className='space-y-4'>
-                                    {rFertilizers.map((factor: any, index: number) => (
-                                        <div key={index} className='flex justify-between'>
-                                            <span className='text-[17px] font-thin'>{factor}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {recDetails && (
-                            <div className='mx-10 mt-10 text-[21px]'>
-                                <h3 className='font-semibold'>Recommendations</h3>
-                                <hr className='mb-4' />
-                                <div className='space-y-4'>
-                                    {recDetails.crops.map((crop: any, index: number) => (
-                                        <div key={index} className='flex justify-between'>
-                                            <span className='text-[17px] font-thin'>{crop.crop}</span>
-                                            <span className='text-[17px] font-thin'>{crop.summary}</span>
-                                        </div>
-                                    ))}
-                                    {recDetails.fertilizers.map((fertilizer: any, index: number) => (
-                                        <div key={index} className='flex justify-between'>
-                                            <span className='text-[17px] font-thin'>{fertilizer.fertilizer}</span>
-                                            <span className='text-[17px] font-thin'>{fertilizer.recommendation}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )} */}
                     </div>
-                </SheetContent>
-            </Sheet>
-        </div>
+
+                    <RecommendationsDisplay
+                        recommendations={recDetails}
+                        cropRecommendation={rCrops}
+                        fertilizerRecommendation={rFertilizers}
+                    />
+                </div>
+            </SheetContent>
+        </Sheet>
     );
 };
 
