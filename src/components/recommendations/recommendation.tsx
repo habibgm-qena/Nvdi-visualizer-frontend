@@ -128,66 +128,82 @@ export const RecommendationsDisplay: React.FC<RecommendationsDisplayProps> = ({
         index: number;
         isloading?: boolean;
     }> = ({ fertilizer, index, isloading = false }) => {
+        const hasComposition = !!fertilizer.composition?.trim();
+        const hasRecommendation = !!fertilizer.recommendation?.trim();
+        const hasAlignment = !!fertilizer.alignment?.trim();
+        const hasDetails = hasRecommendation || hasAlignment;
+
         return (
             <Card
                 key={index}
-                className='border-0 bg-white shadow-sm transition-all duration-200 hover:shadow dark:bg-gray-800'>
+                className='group overflow-hidden rounded-2xl border border-zinc-200/70 bg-white p-0 shadow-sm transition-all duration-200 hover:border-sky-200 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-sky-900'>
                 <Accordion type='single' collapsible className='w-full'>
-                    <AccordionItem value={`item-${index}`} className='border-0'>
-                        <CardHeader className='border-b border-gray-100 p-3 dark:border-gray-700'>
-                            <AccordionTrigger className='flex w-full items-center justify-between py-0 hover:no-underline'>
+                    <AccordionItem value={`fert-${index}`} className='border-0'>
+                        <AccordionTrigger
+                            disabled={!hasDetails}
+                            className='flex w-full items-center gap-3 px-3 py-3 hover:no-underline data-[state=open]:bg-sky-50/40 dark:data-[state=open]:bg-sky-950/20 [&>svg]:hidden'>
+                            <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-sm shadow-sky-500/30'>
+                                <FlaskConical className='h-4 w-4' />
+                            </div>
+
+                            <div className='min-w-0 flex-1 text-left'>
                                 <div className='flex items-center gap-2'>
-                                    <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300'>
-                                        <FlaskConical className='h-4 w-4' />
-                                    </div>
-                                    <div className='text-left'>
-                                        <CardTitle className='text-lg font-medium text-gray-800 dark:text-gray-100'>
-                                            {fertilizer.fertilizer}
-                                        </CardTitle>
-                                        <p className='mt-0.5 text-xs text-gray-500 dark:text-gray-400'>
-                                            {fertilizer.composition}
-                                        </p>
-                                        {isloading && (
-                                            <div className='mt-3 flex items-center justify-center'>
-                                                <Loader className='h-4 w-4 animate-spin rounded-full border-t-2 border-b-2 border-gray-900' />
-                                                {/* consolting gen ai */}
-                                                <p className='ml-2 text-sm text-gray-500 dark:text-gray-400'>
-                                                    Consulting GenAI...
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
+                                    <CardTitle className='truncate text-sm font-semibold text-zinc-800 dark:text-zinc-100'>
+                                        {fertilizer.fertilizer}
+                                    </CardTitle>
+                                    <Badge className='shrink-0 rounded-full border-0 bg-sky-100 px-2 py-0.5 text-[10px] font-medium text-sky-700 dark:bg-sky-900/40 dark:text-sky-300'>
+                                        <Sparkles className='mr-0.5 h-2.5 w-2.5' />
+                                        Best Match
+                                    </Badge>
                                 </div>
-                                {/* <ChevronDown className='h-4 w-4 shrink-0 text-gray-500 transition-transform duration-200 dark:text-gray-400' /> */}
-                            </AccordionTrigger>
-                        </CardHeader>
-
-                        <AccordionContent>
-                            <CardContent className='space-y-3 p-3 pt-3'>
-                                <div>
-                                    <h4 className='mb-1 text-xs font-medium tracking-wide text-blue-600 uppercase dark:text-blue-400'>
-                                        Recommendation
-                                    </h4>
-                                    <p className='text-xs text-gray-700 dark:text-gray-300'>
-                                        {fertilizer.recommendation}
+                                {hasComposition && (
+                                    <p className='mt-0.5 truncate text-[11px] text-zinc-500 dark:text-zinc-400'>
+                                        {fertilizer.composition}
                                     </p>
-                                </div>
+                                )}
+                            </div>
 
-                                <div>
-                                    <h4 className='mb-1 text-xs font-medium tracking-wide text-blue-600 uppercase dark:text-blue-400'>
-                                        Soil Alignment
-                                    </h4>
-                                    <p className='text-xs text-gray-700 dark:text-gray-300'>{fertilizer.alignment}</p>
-                                </div>
-                            </CardContent>
+                            {hasDetails && (
+                                <ChevronDown className='h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200 group-data-[state=open]:rotate-180' />
+                            )}
+                        </AccordionTrigger>
 
-                            <CardFooter className='flex justify-start border-t border-gray-100 p-2 dark:border-gray-700'>
-                                <Badge className='flex items-center gap-1 rounded-full border-0 bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'>
-                                    <Sparkles className='h-3 w-3' />
-                                    Best Match
-                                </Badge>
-                            </CardFooter>
-                        </AccordionContent>
+                        {isloading && (
+                            <div className='flex items-center gap-2 border-t border-zinc-100 px-4 py-3 dark:border-zinc-800'>
+                                <Loader className='h-3.5 w-3.5 animate-spin text-sky-500' />
+                                <p className='text-xs text-zinc-500 dark:text-zinc-400'>Consulting GenAI…</p>
+                            </div>
+                        )}
+
+                        {hasDetails && (
+                            <AccordionContent className='px-0 pb-0'>
+                                <div className='space-y-3 border-t border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-950/40'>
+                                    {hasRecommendation && (
+                                        <div>
+                                            <p className='mb-1 text-[10px] font-semibold tracking-[0.12em] text-sky-700 uppercase dark:text-sky-400'>
+                                                Recommendation
+                                            </p>
+                                            <p className='text-xs leading-relaxed text-zinc-700 dark:text-zinc-300'>
+                                                {fertilizer.recommendation}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {hasRecommendation && hasAlignment && (
+                                        <div className='h-px bg-zinc-200/70 dark:bg-zinc-800' />
+                                    )}
+                                    {hasAlignment && (
+                                        <div>
+                                            <p className='mb-1 text-[10px] font-semibold tracking-[0.12em] text-sky-700 uppercase dark:text-sky-400'>
+                                                Soil Alignment
+                                            </p>
+                                            <p className='text-xs leading-relaxed text-zinc-700 dark:text-zinc-300'>
+                                                {fertilizer.alignment}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </AccordionContent>
+                        )}
                     </AccordionItem>
                 </Accordion>
             </Card>
